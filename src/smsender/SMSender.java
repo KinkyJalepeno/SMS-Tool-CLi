@@ -31,12 +31,11 @@ public class SMSender {
         //send authentication string including IP and password
         p.println("{\"method\":\"authentication\",\"server_password\":\"" + pass + "\"}");        
             String response = sc1.nextLine();
-            System.out.println("\n" + response.substring(32, 45) + "\n");
-            
-        p.println("");
+            System.out.println("\n" + response + "\n");   
+            p.println("");
             response = sc1.nextLine();
             System.out.println("\n" + response);
-            
+        
             Thread.sleep(1000);
         
         while(true) {
@@ -46,9 +45,9 @@ public class SMSender {
             System.out.println("\t      Select an Option");
             System.out.println("\t -----------------------------");
             System.out.println("0 \t Exit");
-            System.out.println("1 \t Send an SMS");
-            System.out.println("2 \t Send a multi-port SMS");
-            System.out.println("3 \t Reserved");
+            System.out.println("1 \t Send an SMS (random port)");
+            System.out.println("2 \t Send an SMS (specify port)");
+            System.out.println("3 \t Send a multi-sms (all ports)");
             System.out.println("4 \t Reserved");
             System.out.print("Option: ");
             
@@ -65,7 +64,7 @@ public class SMSender {
             switch (option) {
 
                 case 1:
-                    sendSingle();
+                    sendRSingle(s, sc);
                     break;
 
                 case 2:
@@ -89,10 +88,32 @@ public class SMSender {
         s.close();
      }//end main
     
-    private static void sendSingle(){
-      System.out.println("You chose to send a message");
-      //return;
-    }
+    private static void sendRSingle(Socket s, Scanner sc) throws IOException, InterruptedException{
+        
+        Scanner sc1 = new Scanner(new BufferedInputStream(System.in));
+        sc1 = new Scanner(s.getInputStream());
+        PrintStream p = new PrintStream(s.getOutputStream());
+        
+        System.out.print("Enter number to send to: ");
+        String num = sc.next();
+      
+        p.println("{\"number\":\"" + num + "\", \"msg\":\"Random port test\", \"unicode\":\"5\"}"); 
+        String response = sc1.nextLine();
+        
+        for (int i = 1; i < 3; i ++){
+        response = sc1.nextLine();
+        System.out.println("\n" + response + "\n");
+        }
+        System.out.println("Press the Enter key to continue...");
+          
+      try {
+            System.in.read();
+        }  
+        catch(Exception e)
+        {}  
+    }//end try 
+    
+        
     
     private static void sendMulti(){
       System.out.println("You chose to send a multi-message");
