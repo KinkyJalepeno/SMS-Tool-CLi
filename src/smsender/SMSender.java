@@ -68,7 +68,7 @@ public class SMSender {
                     break;
 
                 case 2:
-                    sendMulti();
+                    sendSingle(s);
                     break;
 
                 case 3:
@@ -84,6 +84,7 @@ public class SMSender {
                     break;
             } // end switch
         }// end infinite loop
+        sc1.close();
         sc.close();
         s.close();
      }//end main
@@ -101,24 +102,31 @@ public class SMSender {
         String response = sc1.nextLine();
         
         for (int i = 1; i < 3; i ++){
-        response = sc1.nextLine();
-        System.out.println("\n" + response + "\n");
-        }
-        System.out.println("Press the Enter key to continue...");
+            response = sc1.nextLine();
+            System.out.println("\n" + response + "\n");
+            }
+            System.out.println("Press the Enter key to continue...");
           
-      try {
+        try {
             System.in.read();
         }  
         catch(Exception e)
-        {}  
-    }//end try 
+        {}//end try  
+    }//end sendRSingle 
     
         
     
-    private static void sendMulti(){
-      System.out.println("You chose to send a multi-message");
-      //return;  
-    }
+        private static void sendSingle(Socket s) throws IOException{
+            PrintWriter p =  new PrintWriter(s.getOutputStream(), true);
+            BufferedReader bufRd = new BufferedReader(new InputStreamReader(s.getInputStream()));
+           
+            p.println("{\"number\":\"07753895813\", \"msg\":\"Random port test\", \"unicode\":\"5\"}");
+            String response = bufRd.readLine();
+            for (int i = 1; i < 3; i++){
+                response = bufRd.readLine();
+                System.out.println(response + "\n");
+            }
+        }//end sendSingle
     
     private static void reserve(){
       System.out.println("This option is reserved for later");
