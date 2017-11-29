@@ -68,15 +68,15 @@ public class SMSender {
                     break;
 
                 case 2:
-                    sendSingle(s);
+                    sendSingle(s, sc);
                     break;
 
                 case 3:
-                    reserve();
+                    reserved();
                     break;
 
                 case 4:
-                    reserve2();
+                    reserved2();
                     break;
 
                 default:
@@ -89,20 +89,19 @@ public class SMSender {
         s.close();
      }//end main
     
-    private static void sendRSingle(Socket s, Scanner sc) throws IOException, InterruptedException{
+    private static void sendRSingle(Socket s, Scanner sc) throws IOException {
         
-        Scanner sc1 = new Scanner(new BufferedInputStream(System.in));
-        sc1 = new Scanner(s.getInputStream());
-        PrintStream p = new PrintStream(s.getOutputStream());
+        PrintWriter p =  new PrintWriter(s.getOutputStream(), true);
+        BufferedReader bufRd = new BufferedReader(new InputStreamReader(s.getInputStream()));
         
         System.out.print("Enter number to send to: ");
         String num = sc.next();
       
         p.println("{\"number\":\"" + num + "\", \"msg\":\"Random port test\", \"unicode\":\"5\"}"); 
-        String response = sc1.nextLine();
+        String response = bufRd.readLine();
         
         for (int i = 1; i < 3; i ++){
-            response = sc1.nextLine();
+            response = bufRd.readLine();
             System.out.println("\n" + response + "\n");
             }
             System.out.println("Press the Enter key to continue...");
@@ -116,24 +115,34 @@ public class SMSender {
     
         
     
-        private static void sendSingle(Socket s) throws IOException{
+        private static void sendSingle(Socket s, Scanner sc) throws IOException, InterruptedException{
             PrintWriter p =  new PrintWriter(s.getOutputStream(), true);
             BufferedReader bufRd = new BufferedReader(new InputStreamReader(s.getInputStream()));
+            
+            System.out.print("Enter card address and port in format CC#P: ");
+            String port = sc.next();
+            
+            System.out.print("Enter number to send to: ");
+            String num = sc.next();
            
-            p.println("{\"number\":\"07753895813\", \"msg\":\"Random port test\", \"unicode\":\"5\"}");
-            String response = bufRd.readLine();
-            for (int i = 1; i < 3; i++){
+            p.println("{\"number\": \"" + num +"\",\"msg\":\"Single port test:\",\"unicode\":\"2\",\"send_to_sim\":\""+ port +"\"}");
+   
+                String response = bufRd.readLine();
                 response = bufRd.readLine();
-                System.out.println(response + "\n");
-            }
+                System.out.println(response.substring(1, 22) + (response.substring(243, 263)));
+           
+                response = bufRd.readLine();
+                System.out.println(response.substring(165, 186) + (response.substring(401, 414) + "\n"));
+                Thread.sleep(2000);
+            
         }//end sendSingle
     
-    private static void reserve(){
+    private static void reserved(){
       System.out.println("This option is reserved for later");
       //return;  
     }
     
-    private static void reserve2(){
+    private static void reserved2(){
       System.out.println("This option is reserved for later");
       //return;  
     }
