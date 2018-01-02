@@ -1,6 +1,5 @@
 package smsender;
 
-//import com.google.gson.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.*;
@@ -9,7 +8,7 @@ import java.util.*;
 
 /**
  *
- * @author Dave.Graham
+ * @author Dave.Graham finished Jan 2nd 2018
  */
 public class SMSender {
 
@@ -52,8 +51,8 @@ public class SMSender {
             System.out.println("0 \t Exit");
             System.out.println("1 \t Send an SMS (random port)");
             System.out.println("2 \t Send an SMS (specify port)");
-            System.out.println("3 \t Send a multi-sms (all ports)");
-            System.out.println("4 \t Reserved");
+            System.out.println("3 \t Send an SMS out of all ports");
+            System.out.println("4 \t ** Not yet used**");
             System.out.print("Option: ");
 
             // start scanner to receive option
@@ -109,7 +108,7 @@ public class SMSender {
             response = bufRd.readLine();
             System.out.println("\n" + response + "\n");
         }
-        System.out.println("Press the Enter key to continue...");
+        System.out.println("Hit Enter to continue...");
         try {
             System.in.read();
         } catch (Exception e) {
@@ -126,16 +125,18 @@ public class SMSender {
 
         System.out.print("Enter number to send to: ");
         String num = sc.next();
+        System.out.println("");
 
-        p.println("{\"number\": \"" + num + "\",\"msg\":\"Single port test:\",\"unicode\":\"2\",\"send_to_sim\":\"" + port + "\"}");
-
+        p.println("{\"number\": \"" + num + "\",\"msg\":\"" + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + port + "\"}");
         
         String response = bufRd.readLine();
         response = bufRd.readLine();
-        System.out.println(response.substring(1, 22) + (response.substring(243, 263)));
+        System.out.println(response.substring(2, 23) + (response.substring(218, 239)));
 
         response = bufRd.readLine();
-        System.out.println(response.substring(165, 186) + (response.substring(401, 414) + "\n"));
+        System.out.println(response.substring(166, 187) + (response.substring(375, 388) + "\n"));
+        
+        System.out.print("Hit enter to continue");
         
         try {
             System.in.read();
@@ -179,7 +180,7 @@ public class SMSender {
             }
         }
         System.out.println("");
-        System.out.println("Press the Enter key to continue...");
+        System.out.println("Hit Enter to continue...");
         try {
             System.in.read();
         } catch (Exception e) {
