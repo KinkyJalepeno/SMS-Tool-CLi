@@ -16,12 +16,17 @@ public class SMSender {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
 
         Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Starting gateway connection: " + "\n");
 
         System.out.print("Enter gateway IP address: ");
         String address = sc.next();
 
         System.out.print("Enter gateways sms server password: ");
         String pass = sc.next();
+        
+        System.out.print("Enter number to send to: ");
+        String num = sc.next();
 
         //open a new socket to gateway with IP address from scanner
         Socket s = new Socket(address, 63333);
@@ -49,10 +54,11 @@ public class SMSender {
             System.out.println("\t      Select an Option");
             System.out.println("\t -----------------------------");
             System.out.println("0 \t Exit");
+            System.out.println("");
             System.out.println("1 \t Send an SMS (random port)");
             System.out.println("2 \t Send an SMS (specify port)");
-            System.out.println("3 \t Send an SMS out of all ports");
-            System.out.println("4 \t ** Not yet used**");
+            System.out.println("3 \t Send an SMS out of all ports of specified card");
+            System.out.println("4 \t Send an SMS out of all ports (6u units only)");
             System.out.print("Option: ");
 
             // start scanner to receive option
@@ -67,19 +73,19 @@ public class SMSender {
             switch (option) {
 
                 case 1:
-                    sendRSingle(s, sc);
+                    sendRSingle(s, num);
                     break;
 
                 case 2:
-                    sendSingle(s, sc);
+                    sendSingle(s, sc, num);
                     break;
 
                 case 3:
-                    allPorts(s, sc);
+                    allCard(s, sc, num);
                     break;
 
                 case 4:
-                    reserved2();
+                    allPorts(s, sc, num);
                     break;
 
                 default:
@@ -92,14 +98,14 @@ public class SMSender {
         s.close();
     }//end main
 
-    private static void sendRSingle(Socket s, Scanner sc) throws IOException, InterruptedException {
+    private static void sendRSingle(Socket s, String num) throws IOException, InterruptedException {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
 
         PrintWriter p = new PrintWriter(s.getOutputStream(), true);
         BufferedReader bufRd = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
-        System.out.print("Enter number to send to: ");
-        String num = sc.next();
+        //System.out.print("Enter number to send to: ");
+        //num = sc.next();
 
         p.println("{\"number\":\"" + num + "\", \"msg\":\"Random port test\", \"unicode\":\"5\"}");
         String response = bufRd.readLine();
@@ -115,7 +121,7 @@ public class SMSender {
         }//end try for catching enter key press
     }//end sendRSingle method
 
-    private static void sendSingle(Socket s, Scanner sc) throws IOException, InterruptedException {
+    private static void sendSingle(Socket s, Scanner sc, String num) throws IOException, InterruptedException {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
         PrintWriter p = new PrintWriter(s.getOutputStream(), true);
         BufferedReader bufRd = new BufferedReader(new InputStreamReader(s.getInputStream()));
@@ -123,18 +129,18 @@ public class SMSender {
         System.out.print("Enter card address and port in format CC#P: ");
         String port = sc.next();
 
-        System.out.print("Enter number to send to: ");
-        String num = sc.next();
+        //System.out.print("Enter number to send to: ");
+        //String num = sc.next();
         System.out.println("");
 
         p.println("{\"number\": \"" + num + "\",\"msg\":\"" + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + port + "\"}");
         
         String response = bufRd.readLine();
         response = bufRd.readLine();
-        System.out.println(response.substring(2, 23) + (response.substring(218, 239)));
+        System.out.println(response.substring(2, 23) + (response.substring(217, 238)));
 
         response = bufRd.readLine();
-        System.out.println(response.substring(166, 187) + (response.substring(375, 388) + "\n"));
+        System.out.println(response);//.substring(166, 187) + (response.substring(375, 388) + "\n"));
         
         System.out.print("Hit enter to continue");
         
@@ -146,13 +152,13 @@ public class SMSender {
 
     }//end sendSingle
 
-    private static void allPorts(Socket s, Scanner sc) throws IOException, InterruptedException {
+    private static void allPorts(Socket s, Scanner sc, String num) throws IOException, InterruptedException {
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
         
-        System.out.print("Enter number to send to: ");
-        String num = sc.next();
+        //System.out.print("Enter number to send to: ");
+        //String num = sc.next();
         
-        System.out.print("Enter number of GSM cards: ");
+        System.out.print("Enter number of GSM cards installed: ");
         int cards = sc.nextInt();
 
         PrintWriter p = new PrintWriter(s.getOutputStream(), true);
@@ -178,7 +184,7 @@ public class SMSender {
             response = bufRd.readLine();
             System.out.println(response.substring(168, 189) + response.substring(382, 395)); 
             }
-        }
+        }// end loops to collect server responses
         System.out.println("");
         System.out.println("Hit Enter to continue...");
         try {
@@ -188,7 +194,19 @@ public class SMSender {
         }
     }// end allPorts method
 
-    private static void reserved2() {
-        System.out.println("This option is reserved for later");
+    private static void allCard(Socket s, Scanner sc, String num) throws IOException {
+        
+        PrintWriter p = new PrintWriter(s.getOutputStream(), true);
+        BufferedReader bufRd = new BufferedReader(new InputStreamReader(s.getInputStream()));
+        
+        System.out.print("Enter card address for example 21: ");
+        int card = sc.nextInt();
+        
+        for(int port = 1; port < 5; port ++){
+            p.println("{\"number\": \"" + num + "\",\"msg\":\"" + card + " # " + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + card + "#" + port + "\"}");
+            String response = bufRd.readLine();
+            System.out.println(response.substring(1, 22) + response.substring(222, 243));
+        }
+        
     }//end reserved2 method
 }//end class
