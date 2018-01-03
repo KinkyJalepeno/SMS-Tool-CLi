@@ -25,7 +25,7 @@ public class SMSender {
         System.out.print("Enter gateways sms server password: ");
         String pass = sc.next();
         
-        System.out.print("Enter number to send to: ");
+        System.out.print("Enter the mobile number we're going to be sending to: ");
         String num = sc.next();
 
         //open a new socket to gateway with IP address from scanner
@@ -53,7 +53,7 @@ public class SMSender {
             System.out.println("\t -----------------------------");
             System.out.println("\t      Select an Option");
             System.out.println("\t -----------------------------");
-            System.out.println("0 \t Exit");
+            System.out.println("0 \t ***** Exit *****");
             System.out.println("");
             System.out.println("1 \t Send an SMS (random port)");
             System.out.println("2 \t Send an SMS (specify port)");
@@ -193,10 +193,23 @@ public class SMSender {
         System.out.print("Enter card address for example 21: ");
         int card = sc.nextInt();
         
+        String response = bufRd.readLine();
+        
         for(int port = 1; port < 5; port ++){
             p.println("{\"number\": \"" + num + "\",\"msg\":\"" + card + " # " + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + card + "#" + port + "\"}");
-            String response = bufRd.readLine();
-            System.out.println(response);
+            response = bufRd.readLine();
+            System.out.println(response.substring (1, 23));
+         }
+            for(int i = 1; i < 5; i ++){
+                response = bufRd.readLine();
+                System.out.println(response);
+            }
+        System.out.println("");
+        System.out.println("Hit Enter to continue...");
+        try {
+            System.in.read();
+        } catch (Exception e) {
+            
         }
         
     }//end reserved2 method
