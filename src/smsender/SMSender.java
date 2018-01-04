@@ -61,7 +61,7 @@ public class SMSender {
             System.out.println("1 \t Send an SMS (random port)");
             System.out.println("2 \t Send an SMS (specify port)");
             System.out.println("3 \t Send an SMS out of all ports of specified card");
-            System.out.println("4 \t Send an SMS out of all ports (6u units only)");
+            System.out.println("4 \t Send an SMS out of all ports of all cards (6u units only)");
             System.out.println("5 \t Parsing JSON test");
             System.out.print("Option: ");
 
@@ -113,12 +113,26 @@ public class SMSender {
         BufferedReader bufRd = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
         p.println("{\"number\":\"" + num + "\", \"msg\":\"Random port test\", \"unicode\":\"5\"}");
-        //String response = bufRd.readLine();
 
-        for (int i = 1; i < 3; i++) {
-            String response = bufRd.readLine();
-            System.out.println("\n" + response + "\n");
-        }
+        String response = bufRd.readLine();
+        Object obj = JSONValue.parse(response);
+        JSONObject jsonObject = (JSONObject) obj;
+        
+        //String part1 = (String) jsonObject.get("send_to_sim");
+        String part2 = (String) jsonObject.get("reply");
+        
+        System.out.println(" Status: " + part2);
+        
+        response = bufRd.readLine();
+        obj = JSONValue.parse(response);
+        jsonObject = (JSONObject) obj;
+        
+        String part1 = (String) jsonObject.get("number");
+        part2 = (String) jsonObject.get("reply");
+        String part3 = (String) jsonObject.get("send_to_sim");
+        
+        System.out.println(" Send to Sim: " + part3 + " Number: " + part1 + " Status: " + part2);
+        
         System.out.println("Hit Enter to continue...");
         try {
             System.in.read();
@@ -139,12 +153,23 @@ public class SMSender {
 
         p.println("{\"number\": \"" + num + "\",\"msg\":\"" + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + port + "\"}");
         
-        //String response = bufRd.readLine();
         String response = bufRd.readLine();
-        System.out.println(response);
-
+        Object obj = JSONValue.parse(response);
+        JSONObject jsonObject = (JSONObject) obj;
+        
+        String part1 = (String) jsonObject.get("send_to_sim");
+        String part2 = (String) jsonObject.get("reply");
+        
+        System.out.println("Send to sim: " + part1 + " Status: " + part2);
+        
         response = bufRd.readLine();
-        System.out.println(response);
+        obj = JSONValue.parse(response);
+        jsonObject = (JSONObject) obj;
+        
+        part1 = (String) jsonObject.get("number");
+        part2 = (String) jsonObject.get("reply");
+        
+        System.out.println("Number: " + part1 + " Status: " + part2);
         
         System.out.print("Hit enter to continue");
         
@@ -166,22 +191,31 @@ public class SMSender {
         BufferedReader bufRd = new BufferedReader(new InputStreamReader(s.getInputStream()));
         
         int send = cards + 20;
-            //String response = bufRd.readLine();
-            //response = null;
         
         for(int i = 21; i <= send; i++){
             for(int port = 1; port < 5; port ++){
                 p.println("{\"number\": \"" + num + "\",\"msg\":\"" + i + " # " + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + i + "#" + port + "\"}");
                 String response = bufRd.readLine();
-                System.out.println(response);
-
+                Object obj = JSONValue.parse(response);
+                JSONObject jsonObject = (JSONObject) obj;
+        
+                String part1 = (String) jsonObject.get("send_to_sim");
+                String part2 = (String) jsonObject.get("reply");
+        
+                System.out.println("Send to sim: " + part1 + " Status: " + part2);
             }// end secondary for loop for port number            
         }// end main for loop for card address
         System.out.println("");
         for(int i = 21; i <= send; i++){
             for(int port = 1; port < 5; port ++){
-            String response = bufRd.readLine();
-            System.out.println(response); 
+                String response = bufRd.readLine();
+                Object obj = JSONValue.parse(response);
+                JSONObject jsonObject = (JSONObject) obj;
+        
+                String part1 = (String) jsonObject.get("send_to_sim");
+                String part2 = (String) jsonObject.get("reply");
+        
+                System.out.println("Send to sim: " + part1 + " Status: " + part2);
             }
         }// end loops to collect server responses
         System.out.println("");
@@ -206,11 +240,24 @@ public class SMSender {
         for(int port = 1; port < 5; port ++){
             p.println("{\"number\": \"" + num + "\",\"msg\":\"" + card + " # " + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + card + "#" + port + "\"}");
             String response = bufRd.readLine();
-            System.out.println(response.substring (1, 23));
+            Object obj = JSONValue.parse(response);
+            JSONObject jsonObject = (JSONObject) obj;
+        
+            String part1 = (String) jsonObject.get("send_to_sim");
+            String part2 = (String) jsonObject.get("reply");
+        
+            System.out.println("Send to sim: " + part1 + " Status: " + part2);
          }
+        System.out.println("");
             for(int i = 1; i < 5; i ++){
                 String response = bufRd.readLine();
-                System.out.println(response);
+                Object obj = JSONValue.parse(response);
+                JSONObject jsonObject = (JSONObject) obj;
+        
+                String part1 = (String) jsonObject.get("send_to_sim");
+                String part2 = (String) jsonObject.get("reply");
+        
+                System.out.println("Send to sim: " + part1 + " Status: " + part2);
             }
         System.out.println("");
         System.out.println("Hit Enter to continue...");
