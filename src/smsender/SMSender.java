@@ -4,6 +4,9 @@ import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
+import org.json.simple.JSONObject;  
+import org.json.simple.JSONValue;
+
 
 
 /**
@@ -59,6 +62,7 @@ public class SMSender {
             System.out.println("2 \t Send an SMS (specify port)");
             System.out.println("3 \t Send an SMS out of all ports of specified card");
             System.out.println("4 \t Send an SMS out of all ports (6u units only)");
+            System.out.println("4 \t Parsing JSON test");
             System.out.print("Option: ");
 
             // start scanner to receive option
@@ -87,6 +91,9 @@ public class SMSender {
                 case 4:
                     allPorts(s, sc, num);
                     break;
+                    
+                case 5:
+                    jsonTest(s, sc, num);
 
                 default:
                     System.err.println("You must select an option from 0 to 4 ! \n");
@@ -213,4 +220,44 @@ public class SMSender {
         }
         
     }//end reserved2 method
+    
+    private static void jsonTest(Socket s, Scanner sc, String num) throws IOException{
+        
+        PrintWriter p = new PrintWriter(s.getOutputStream(), true);
+        BufferedReader bufRd = new BufferedReader(new InputStreamReader(s.getInputStream()));
+
+        System.out.print("Enter card address and port in format CC#P: ");
+        String port = sc.next();
+
+        System.out.println("");
+
+        p.println("{\"number\": \"" + num + "\",\"msg\":\"" + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + port + "\"}");
+        
+        String response = bufRd.readLine();
+        response = bufRd.readLine();
+        Object obj = JSONValue.parse(response);
+        JSONObject jsonObject = (JSONObject) obj;
+        
+        String part1 = (String) jsonObject.get("send_to_sim");
+        String part2 = (String) jsonObject.get("reply");
+        
+        System.out.println("Send to sim: " + part1 + " Status: " + part2);
+        
+        response = bufRd.readLine();
+        obj = JSONValue.parse(response);
+        jsonObject = (JSONObject) obj;
+        
+        part1 = (String) jsonObject.get("number");
+        part2 = (String) jsonObject.get("reply");
+        
+        System.out.println("Number: " + part1 + " Status: " + part2);     
+        
+        System.out.print("Hit enter to continue");
+        
+        try {
+            System.in.read();
+        } catch (Exception e) {
+            
+        }
+    }// end jsonTest
 }//end class
