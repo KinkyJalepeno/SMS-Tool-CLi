@@ -62,7 +62,7 @@ public class SMSender {
             System.out.println("2 \t Send an SMS (specify port)");
             System.out.println("3 \t Send an SMS out of all ports of specified card");
             System.out.println("4 \t Send an SMS out of all ports (6u units only)");
-            System.out.println("4 \t Parsing JSON test");
+            System.out.println("5 \t Parsing JSON test");
             System.out.print("Option: ");
 
             // start scanner to receive option
