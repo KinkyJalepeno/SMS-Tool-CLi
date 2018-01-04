@@ -51,7 +51,7 @@ public class SMSender {
 
         while (true) {
             new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            p.println("{\"method\":\"authentication\",\"server_password\":\"" + pass + "\"}");
+            //p.println("{\"method\":\"authentication\",\"server_password\":\"" + pass + "\"}");
             System.out.println("\t Dave's SMS Sender Application");
             System.out.println("\t -----------------------------");
             System.out.println("\t      Select an Option");
@@ -94,6 +94,7 @@ public class SMSender {
                     
                 case 5:
                     jsonTest(s, sc, num);
+                    break;
 
                 default:
                     System.err.println("You must select an option from 0 to 4 ! \n");
@@ -112,10 +113,10 @@ public class SMSender {
         BufferedReader bufRd = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
         p.println("{\"number\":\"" + num + "\", \"msg\":\"Random port test\", \"unicode\":\"5\"}");
-        String response = bufRd.readLine();
+        //String response = bufRd.readLine();
 
         for (int i = 1; i < 3; i++) {
-            response = bufRd.readLine();
+            String response = bufRd.readLine();
             System.out.println("\n" + response + "\n");
         }
         System.out.println("Hit Enter to continue...");
@@ -138,8 +139,8 @@ public class SMSender {
 
         p.println("{\"number\": \"" + num + "\",\"msg\":\"" + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + port + "\"}");
         
+        //String response = bufRd.readLine();
         String response = bufRd.readLine();
-        response = bufRd.readLine();
         System.out.println(response);
 
         response = bufRd.readLine();
@@ -165,13 +166,13 @@ public class SMSender {
         BufferedReader bufRd = new BufferedReader(new InputStreamReader(s.getInputStream()));
         
         int send = cards + 20;
-            String response = bufRd.readLine();
-            response = null;
+            //String response = bufRd.readLine();
+            //response = null;
         
         for(int i = 21; i <= send; i++){
             for(int port = 1; port < 5; port ++){
                 p.println("{\"number\": \"" + num + "\",\"msg\":\"" + i + " # " + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + i + "#" + port + "\"}");
-                response = bufRd.readLine();
+                String response = bufRd.readLine();
                 System.out.println(response);
 
             }// end secondary for loop for port number            
@@ -179,7 +180,7 @@ public class SMSender {
         System.out.println("");
         for(int i = 21; i <= send; i++){
             for(int port = 1; port < 5; port ++){
-            response = bufRd.readLine();
+            String response = bufRd.readLine();
             System.out.println(response); 
             }
         }// end loops to collect server responses
@@ -200,15 +201,15 @@ public class SMSender {
         System.out.print("Enter card address for example 21: ");
         int card = sc.nextInt();
         
-        String response = bufRd.readLine();
+        //String response = bufRd.readLine();
         
         for(int port = 1; port < 5; port ++){
             p.println("{\"number\": \"" + num + "\",\"msg\":\"" + card + " # " + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + card + "#" + port + "\"}");
-            response = bufRd.readLine();
+            String response = bufRd.readLine();
             System.out.println(response.substring (1, 23));
          }
             for(int i = 1; i < 5; i ++){
-                response = bufRd.readLine();
+                String response = bufRd.readLine();
                 System.out.println(response);
             }
         System.out.println("");
@@ -233,8 +234,8 @@ public class SMSender {
 
         p.println("{\"number\": \"" + num + "\",\"msg\":\"" + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + port + "\"}");
         
+        //String response = bufRd.readLine();
         String response = bufRd.readLine();
-        response = bufRd.readLine();
         Object obj = JSONValue.parse(response);
         JSONObject jsonObject = (JSONObject) obj;
         
