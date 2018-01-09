@@ -273,9 +273,9 @@ public class SMSender {
             System.out.println("Select an option: ");
             System.out.print("");
             System.out.println("1. Query General Queue");
-            System.out.println("2. Query Master Queue");
+            System.out.println("2. Query Master Queue" + "\n");
             System.out.println("3. Flush General Queue");
-            System.out.println("4. Flush Master Queue");
+            System.out.println("4. Flush Master Queue" + "\n");
             System.out.println("5. Return to Main Menu");
             System.out.println("");
             System.out.print("Option: ");
@@ -296,39 +296,42 @@ public class SMSender {
             
                 long gen = (long) jsonObject.get("total_len");
                 System.out.println("Number of messages in general queue: " + gen + "\n" );
-                
             break;
-        
-        }//end switch
-        }//end infinite loop
-
-        //p.println("{\"number\": \"" + num + "\",\"msg\":\"" + port + "\",\"unicode\":\"2\",\"send_to_sim\":\"" + port + "\"}");
-/*        
-        String response = bufRd.readLine();
-        Object obj = JSONValue.parse(response);
-        JSONObject jsonObject = (JSONObject) obj;
-        
-        String part1 = (String) jsonObject.get("send_to_sim");
-        String part2 = (String) jsonObject.get("reply");
-        
-        System.out.println("Send to sim: " + part1 + " Status: " + part2);
-        
-        response = bufRd.readLine();
-        obj = JSONValue.parse(response);
-        jsonObject = (JSONObject) obj;
-        
-        part1 = (String) jsonObject.get("number");
-        part2 = (String) jsonObject.get("reply");
-        
-        System.out.println("Number: " + part1 + " Status: " + part2);     
-        
-        System.out.print("Hit enter to continue");
-        
-        try {
-            System.in.read();
-        } catch (Exception e) {
             
-        }
-*/
-    }// end jsonTest
+            case 2:
+                p.println("{\"method\":\"get_q_size\",\"queue_type\":\"master\"}");
+                response = bufRd.readLine();
+                obj = JSONValue.parse(response);
+                jsonObject = (JSONObject) obj;
+                
+                long mast = (long) jsonObject.get("total_len");
+                System.out.println("Number of messages in master queue: " + mast + "\n" );
+            break;
+            
+            case 3:
+                p.println("{\"method\":\"delete_queue\"}");
+                response = bufRd.readLine();
+                obj = JSONValue.parse(response);
+                jsonObject = (JSONObject) obj;
+                
+                String reply = (String) jsonObject.get("reply");
+                System.out.println("Reply: " + reply + "\n");
+            break;
+            
+            case 4:
+                p.println("{ \"method\":\"delete_queue\",\"queue_type\":\"master\" }");
+                response = bufRd.readLine();
+                obj = JSONValue.parse(response);
+                jsonObject = (JSONObject) obj;
+                
+                reply = (String) jsonObject.get("reply");
+                System.out.println("Reply: " + reply + "\n");
+            break;
+            
+            default:
+                System.err.println("You must select an option from 1 to 5 ! \n");
+            break;
+            }//end switch
+        }//end infinite loop
+    }// end queue operations
 }//end class
