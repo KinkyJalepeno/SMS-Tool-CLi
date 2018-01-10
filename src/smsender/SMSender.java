@@ -65,8 +65,8 @@ public class SMSender {
             System.out.println("4 \t Send an SMS out of all ports of all cards (6u units only)");
             System.out.println("5 \t Queue Operations");
             System.out.println("6 \t Pause Server");
-            System.out.println("7 \t Start Server");
-            System.out.print("Option: " + "\n" );
+            System.out.println("7 \t Start Server" + "\n");
+            System.out.print("Option: ");
 
             // start scanner to receive option
             int option = sc.nextInt();
@@ -307,7 +307,7 @@ public class SMSender {
                     JSONObject jsonObject = (JSONObject) obj;
 
                     long gen = (long) jsonObject.get("total_len");
-                    System.out.println("Number of messages in general queue: " + gen + "\n");
+                    System.out.println("*** Number of messages in general queue: " + gen + "\n");
                     break;
 
                 case 2:
@@ -317,7 +317,7 @@ public class SMSender {
                     jsonObject = (JSONObject) obj;
 
                     long mast = (long) jsonObject.get("total_len");
-                    System.out.println("Number of messages in master queue: " + mast + "\n");
+                    System.out.println("*** Number of messages in master queue: " + mast + "\n");
                     break;
 
                 case 3:
