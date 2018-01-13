@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="SMSender:jar">
+    <output-path>E:/Completed Java Projects</output-path>
+    <root id="archive" name="SMSender.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="E:/Completed Java Projects/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="SMSender" />
+      <element id="extracted-dir" path="$USER_HOME$/Dropbox/Java Projects/Libraries/json-simple-1.1.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
