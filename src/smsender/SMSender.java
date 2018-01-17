@@ -52,7 +52,7 @@ public class SMSender {
 
         while (true) {
             new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            //p.println("{\"method\":\"authentication\",\"server_password\":\"" + pass + "\"}");
+
             System.out.println("\t Dave's SMS Sender Application");
             System.out.println("\t -----------------------------");
             System.out.println("\t      Select an Option");
@@ -139,9 +139,10 @@ public class SMSender {
 
         String part1 = (String) jsonObject.get("number");
         part2 = (String) jsonObject.get("reply");
-        String part3 = (String) jsonObject.get("send_to_sim");
+        String part3 = (String) jsonObject.get("card_add");
+        String part4 = (String) jsonObject.get("port_num");
 
-        System.out.println(" Send to Sim: " + part3 + " Number: " + part1 + " Status: " + part2 + "\n");
+        System.out.println(" Card Address: " + part3 + " Port: " + part4 + " Number: " + part1 + " Status: " + part2 + "\n");
 
         System.out.println("Hit Enter to continue...");
         try {
